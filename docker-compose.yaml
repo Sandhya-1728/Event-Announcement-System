@@ -25,7 +25,9 @@ services:
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
       - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
       - EVENTS_TABLE=${EVENTS_TABLE}
+      - USERS_TABLE=${USERS_TABLE}
       - SNS_TOPIC_ARN=${SNS_TOPIC_ARN}
+      - JWT_SECRET=${JWT_SECRET}
     volumes:
       - ./backend:/app
     networks:

@@ -1,106 +1,112 @@
 # Event Announcement System
 
-A serverless web application for managing and announcing events, built with React.js frontend and AWS serverless backend.
+A web application for creating and subscribing to event announcements with authentication using AWS services.
 
-## Features
-
-- View upcoming events
-- Submit new events
-- Email subscription for event notifications
-- Serverless architecture using AWS services
-
-## Tech Stack
+## System Architecture
 
 ### Frontend
-- React.js
-- React Router
-- Axios for API calls
+- React.js application
+- User authentication
+- Event creation and listing
+- Email subscription
 
-### Backend (AWS Serverless)
-- AWS Lambda
-- Amazon API Gateway
-- Amazon DynamoDB
-- Amazon SNS
-- Amazon S3
+### Backend
+- FastAPI for RESTful API
+- JWT Authentication
+- AWS DynamoDB for data storage
+- AWS SNS for notifications
 
-## Setup Instructions
+## Prerequisites
 
-### Frontend Setup
-1. Navigate to the frontend directory:
-   ```bash
-   cd frontend
-   ```
+- [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/)
+- AWS Account with appropriate permissions
+- AWS CLI configured locally
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+## AWS Resources Required
 
-3. Start the development server:
-   ```bash
-   npm start
-   ```
+1. DynamoDB Tables:
+   - `event_announcement_users` - For user data
+   - `event_announcements` - For event data
 
-### Backend Setup
-1. Navigate to the backend directory:
-   ```bash
-   cd backend
-   ```
+2. SNS Topic:
+   - For sending email notifications
 
-2. Create a virtual environment:
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
+## Setup
 
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+1. **Clone the repository**
 
-### AWS Setup
-1. Create the following AWS resources:
-   - DynamoDB table for events
-   - SNS topic for notifications
-   - API Gateway endpoints
-   - Lambda functions
-   - S3 bucket for frontend hosting
+```bash
+git clone https://github.com/your-repo/event-announcement-system.git
+cd event-announcement-system
+```
 
-2. Configure environment variables:
-   - Create a `.env` file in the backend directory
-   - Add the following variables:
-     ```
-     EVENTS_TABLE=your-dynamodb-table-name
-     SNS_TOPIC_ARN=your-sns-topic-arn
-     ```
+2. **AWS Setup**
 
-## Deployment
+```bash
+# Create a .env file in the project root with AWS credentials
+touch .env
 
-### Frontend Deployment
-1. Build the React application:
-   ```bash
-   npm run build
-   ```
+# Add the following to the .env file:
+AWS_ACCESS_KEY_ID=your_aws_access_key
+AWS_SECRET_ACCESS_KEY=your_aws_secret_access_key
+AWS_DEFAULT_REGION=your_aws_region
+EVENTS_TABLE=event_announcements
+USERS_TABLE=event_announcement_users
+SNS_TOPIC_ARN=your_sns_topic_arn
+JWT_SECRET=your_jwt_secret
+```
 
-2. Deploy to S3:
-   ```bash
-   aws s3 sync build/ s3://your-bucket-name
-   ```
+3. **Create the DynamoDB tables**
 
-### Backend Deployment
-1. Package Lambda functions:
-   ```bash
-   zip -r function.zip .
-   ```
+```bash
+# Run the table creation script
+cd backend
+python -m scripts.create_tables
+cd ..
+```
 
-2. Deploy to AWS Lambda:
-   ```bash
-   aws lambda update-function-code --function-name your-function-name --zip-file fileb://function.zip
-   ```
+4. **Start the application**
 
-## Contributing
-1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a new Pull Request 
+```bash
+docker-compose up -d
+```
+
+5. **Access the application**
+
+- Frontend: http://localhost
+- Backend API: http://localhost:8000
+- API Documentation: http://localhost:8000/docs
+
+## Development
+
+### Frontend Development
+
+```bash
+cd frontend
+npm install
+npm start
+```
+
+### Backend Development
+
+```bash
+cd backend
+pip install -r requirements.txt
+uvicorn main:app --reload
+```
+
+## Testing
+
+```bash
+# Backend tests
+cd backend
+pytest
+
+# Frontend tests
+cd frontend
+npm test
+```
+
+## License
+
+This project is licensed under the MIT License. See the LICENSE file for details. 
